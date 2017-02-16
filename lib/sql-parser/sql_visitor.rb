@@ -322,6 +322,10 @@ module SQLParser
       o.value.to_s
     end
 
+    def visit_Bool(o)
+      o.value.to_s
+    end
+
     private
 
     def negate

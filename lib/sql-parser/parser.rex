@@ -57,7 +57,7 @@ rule
             {WB}ORDER{WB}         { [:ORDER, text] }
             {WB}OR{WB}            { [:OR, text] }
             {WB}LIKE{WB}          { [:LIKE, text] }
-            {WB}IS{WB}          { [:IS, text] }
+            {WB}IS{WB}            { [:IS, text] }
             {WB}NULL{WB}          { [:NULL, text] }
             {WB}COUNT{WB}         { [:COUNT, text] }
             {WB}AVG{WB}           { [:AVG, text] }
@@ -81,6 +81,8 @@ rule
             {WB}VALUES{WB}        { [:VALUES, text] }
             {WB}LIMIT{WB}         { [:LIMIT, text] }
             {WB}OFFSET{WB}        { [:OFFSET, text] }
+            {WB}FALSE{WB}         { [:FALSE, text] }
+            {WB}TRUE{WB}          { [:TRUE, text] }
 
 # tokens
             <>            { [:not_equals_operator, text] }

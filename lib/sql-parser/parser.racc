@@ -327,6 +327,7 @@ rule
     : quote character_string_literal quote { result = SQLParser::Statement::String.new(val[1]) }
     | quote quote { result = SQLParser::Statement::String.new('') }
     | datetime_literal
+    | bool_literal
 
   datetime_literal
     : date_literal
@@ -334,6 +335,10 @@ rule
   date_literal
     : DATE date_string { result = SQLParser::Statement::Date.new(val[1]) }
     | date_string { result = SQLParser::Statement::Date.new(val[0]) }
+
+  bool_literal
+    : TRUE { result = SQLParser::Statement::Bool.new(val[0]) }
+    | FALSE { result = SQLParser::Statement::Bool.new(val[0]) }
 
 ---- header ----
 require File.dirname(__FILE__) + '/parser.rex.rb'

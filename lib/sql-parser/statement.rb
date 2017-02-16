@@ -523,6 +523,9 @@ module SQLParser
 
     class Integer < Literal
     end
+
+    class Bool < Literal
+    end
     
   end
 end

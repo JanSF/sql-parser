@@ -264,6 +264,11 @@ class TestStatement < Test::Unit::TestCase
     assert_sql '1', int(1)
   end
 
+  def test_bool
+    assert_sql 'false', bool('false')
+    assert_sql 'true', bool('true')
+  end
+
   private
 
   def assert_sql(expected, ast)
@@ -288,6 +293,10 @@ class TestStatement < Test::Unit::TestCase
 
   def int(value)
     SQLParser::Statement::Integer.new(value)
+  end
+
+  def bool(value)
+    SQLParser::Statement::Bool.new(value)
   end
 
   def col(name)

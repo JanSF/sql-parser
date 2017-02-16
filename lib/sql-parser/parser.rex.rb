@@ -201,6 +201,12 @@ class SQLParser::Parser < Racc::Parser
       when (text = @ss.scan(/\bOFFSET\b/i))
          action { [:OFFSET, text] }
 
+      when (text = @ss.scan(/\bFALSE\b/i))
+         action { [:FALSE, text] }
+
+      when (text = @ss.scan(/\bTRUE\b/i))
+         action { [:TRUE, text] }
+
       when (text = @ss.scan(/<>/i))
          action { [:not_equals_operator, text] }
 
