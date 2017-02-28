@@ -24,6 +24,10 @@ class TestParser < Test::Unit::TestCase
 
   def test_explain
     assert_understands 'EXPLAIN SELECT * FROM `users` WHERE `id` = 1'
+    assert_understands 'EXPLAIN `users`'
+
+    assert_sql 'EXPLAIN `users`', 'DESCRIBE users'
+    assert_sql 'EXPLAIN `users`', 'DESC users'
   end
 
   def test_case_insensitivity
