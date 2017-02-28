@@ -275,6 +275,7 @@ rule
 
   column_reference
     : qualifier period column_name { result = SQLParser::Statement::QualifiedColumn.new(val[0], val[2]) }
+    | qualifier period asterisk { result = SQLParser::Statement::QualifiedColumn.new(val[0], SQLParser::Statement::All.new) }
     | column_name
 
   qualifier
