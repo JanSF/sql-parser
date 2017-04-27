@@ -311,9 +311,14 @@ class TestParser < Test::Unit::TestCase
     assert_sql %{SELECT 'Quote "this"'}, %{SELECT "Quote ""this"""}
     assert_understands %{SELECT 'Quote ''this!'''}
 
-    # # FIXME
-    # assert_sql %{SELECT '"'}, %{SELECT """"}
-    # assert_understands %{SELECT ''''}
+    assert_sql(
+      %{SELECT `a` FROM `b` WHERE (`a`.`c` LIKE '%1%' AND `a`.`d` LIKE '%2%')},
+      %{SELECT `a` FROM `b` WHERE `a`.`c` LIKE '%1%' AND `a`.`d` LIKE '%2%'}
+    )
+    assert_understands %{SELECT `a` FROM `b` WHERE (`a`.`c` LIKE '%1%' AND `a`.`d` LIKE '%2%')}
+
+    assert_sql %{SELECT '"'}, %{SELECT """"}
+    assert_understands %{SELECT ''''}
   end
 
   def test_string
