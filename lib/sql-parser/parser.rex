@@ -20,18 +20,18 @@ rule
 # [:state]  pattern       [actions]
 
 # literals
-            \"{DATE}\"    { [:date_string, Date.parse(text)] }
-            \'{DATE}\'    { [:date_string, Date.parse(text)] }
+            \"{DATE}\"      { [:date_string, Date.parse(text)] }
+            \'{DATE}\'      { [:date_string, Date.parse(text)] }
 
-            \'            { @state = :STRS;  [:quote, text] }
-  :STRS     \'            { @state = nil;    [:quote, text] }
-  :STRS     .*(?=\')      {                  [:character_string_literal, text.gsub("''", "'")] }
+            \'              { @state = :STRS;  [:quote, text] }
+  :STRS     \'(?=[^\']|$)   { @state = nil;    [:quote, text] }
+  :STRS     (?:[^\']|\'\')* {                  [:character_string_literal, text.gsub("''", "'")] }
 
-            \"            { @state = :STRD;  [:quote, text] }
-  :STRD     \"            { @state = nil;    [:quote, text] }
-  :STRD     .*(?=\")      {                  [:character_string_literal, text.gsub('""', '"')] }
+            \"              { @state = :STRD;  [:quote, text] }
+  :STRD     \"(?=[^\"]|$)   { @state = nil;    [:quote, text] }
+  :STRD     (?:[^\"]|\"\")* {                  [:character_string_literal, text.gsub('""', '"')] }
 
-            {UINT}        { [:unsigned_integer, text.to_i] }
+            {UINT}          { [:unsigned_integer, text.to_i] }
 
 # built-in functions
             {IDENT}\(\)   { [:built_in_function, text] }
