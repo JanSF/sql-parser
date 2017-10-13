@@ -86,6 +86,11 @@ rule
             {WB}OFFSET{WB}        { [:OFFSET, text] }
             {WB}FALSE{WB}         { [:FALSE, text] }
             {WB}TRUE{WB}          { [:TRUE, text] }
+            {WB}SHOW{WB}          { [:SHOW, text] }
+            {WB}INDEX{WB}         { [:INDEX, text] }
+            {WB}INDEXES{WB}       { [:INDEX, text] }
+            {WB}CREATE{WB}        { [:CREATE, text] }
+            {WB}TABLE{WB}         { [:TABLE, text] }
 
 # tokens
             <>            { [:not_equals_operator, text] }
