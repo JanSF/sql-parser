@@ -25,6 +25,10 @@ module SQLParser
       ].compact.collect { |e| visit(e) }.join(' ')
     end
 
+    def visit_Explain(o)
+      "EXPLAIN #{visit(o.expression)}"
+    end
+
     def visit_Limit(o)
       offset = o.offset > 0 ? " OFFSET #{o.offset}" : ""
       "LIMIT #{o.row_count}#{offset}"
@@ -42,15 +46,15 @@ module SQLParser
       # FIXME: This feels like a hack
       initialize
 
-      "SELECT #{visit_all([o.list, o.table_expression].compact).join(' ')}"
+      "SELECT #{visit_all([o.modifier, o.list, o.table_expression].compact).join(' ')}"
+    end
+
+    def visit_Distinct(o)
+      "DISTINCT"
     end
 
     def visit_SelectList(o)
       arrayize(o.columns)
-    end
-
-    def visit_Distinct(o)
-      "DISTINCT(#{visit(o.column)})"
     end
 
     def visit_All(o)
@@ -322,6 +326,10 @@ module SQLParser
       o.value.to_s
     end
 
+    def visit_Bool(o)
+      o.value.to_s
+    end
+
     private
 
     def negate
@@ -352,7 +360,7 @@ module SQLParser
     end
 
     def visit_all(nodes)
-      nodes.collect { |e| visit(e) }
+      Array(nodes).collect { |e| visit(e) }
     end
 
     def arrayize(arr)

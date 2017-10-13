@@ -4,9 +4,10 @@ option
   ignorecase
 
 macro
-  DIGIT   [0-9]
-  UINT    {DIGIT}+
-  BLANK   \s+
+  DIGIT      [0-9]
+  UINT       {DIGIT}+
+  BLANK      \s+
+  WB         \b
 
   YEARS   {UINT}
   MONTHS  {UINT}
@@ -19,18 +20,18 @@ rule
 # [:state]  pattern       [actions]
 
 # literals
-            \"{DATE}\"    { [:date_string, Date.parse(text)] }
-            \'{DATE}\'    { [:date_string, Date.parse(text)] }
+            \"{DATE}\"      { [:date_string, Date.parse(text)] }
+            \'{DATE}\'      { [:date_string, Date.parse(text)] }
 
-            \'            { @state = :STRS;  [:quote, text] }
-  :STRS     \'            { @state = nil;    [:quote, text] }
-  :STRS     .*(?=\')      {                  [:character_string_literal, text.gsub("''", "'")] }
+            \'              { @state = :STRS;  [:quote, text] }
+  :STRS     \'(?=[^\']|$)   { @state = nil;    [:quote, text] }
+  :STRS     (?:[^\']|\'\')* {                  [:character_string_literal, text.gsub("''", "'")] }
 
-            \"            { @state = :STRD;  [:quote, text] }
-  :STRD     \"            { @state = nil;    [:quote, text] }
-  :STRD     .*(?=\")      {                  [:character_string_literal, text.gsub('""', '"')] }
+            \"              { @state = :STRD;  [:quote, text] }
+  :STRD     \"(?=[^\"]|$)   { @state = nil;    [:quote, text] }
+  :STRD     (?:[^\"]|\"\")* {                  [:character_string_literal, text.gsub('""', '"')] }
 
-            {UINT}        { [:unsigned_integer, text.to_i] }
+            {UINT}          { [:unsigned_integer, text.to_i] }
 
 # built-in functions
             {IDENT}\(\)   { [:built_in_function, text] }
@@ -39,46 +40,52 @@ rule
             {BLANK}       # no action
 
 # keywords
-            SELECT\s      { [:SELECT, text] }
-            DATE\s        { [:DATE, text] }
-            ASC           { [:ASC, text] }
-            AS\s          { [:AS, text] }
-            FROM\s        { [:FROM, text] }
-            WHERE\s       { [:WHERE, text] }
-            BETWEEN\s     { [:BETWEEN, text] }
-            AND\s         { [:AND, text] }
-            NOT\s         { [:NOT, text] }
-            INNER\s       { [:INNER, text] }
-            INSERT\s      { [:INSERT, text] }
-            INTO\s        { [:INTO, text] }
-            IN\s          { [:IN, text] }
-            ORDER\s       { [:ORDER, text] }
-            OR\s          { [:OR, text] }
-            LIKE\s        { [:LIKE, text] }
-            IS\s          { [:IS, text] }
-            NULL\s        { [:NULL, text] }
-            COUNT\s       { [:COUNT, text] }
-            AVG\s         { [:AVG, text] }
-            MAX\s         { [:MAX, text] }
-            MIN\s         { [:MIN, text] }
-            SUM\s         { [:SUM, text] }
-            GROUP\s       { [:GROUP, text] }
-            BY\s          { [:BY, text] }
-            HAVING\s      { [:HAVING, text] }
-            CROSS\s       { [:CROSS, text] }
-            JOIN\s        { [:JOIN, text] }
-            ON\s          { [:ON, text] }
-            LEFT\s        { [:LEFT, text] }
-            OUTER\s       { [:OUTER, text] }
-            RIGHT\s       { [:RIGHT, text] }
-            FULL\s        { [:FULL, text] }
-            USING\s       { [:USING, text] }
-            EXISTS\s      { [:EXISTS, text] }
-            DESC          { [:DESC, text] }
-            CURRENT_USER\s{ [:CURRENT_USER, text] }
-            VALUES\s      { [:VALUES, text] }
-            LIMIT\s       { [:LIMIT, text] }
-            OFFSET\s      { [:OFFSET, text] }
+            {WB}EXPLAIN{WB}       { [:EXPLAIN, text] }
+            {WB}DESCRIBE{WB}      { [:DESCRIBE, text] }
+            {WB}DESC{WB}          { [:DESC, text] }
+            {WB}SELECT{WB}        { [:SELECT, text] }
+            {WB}DISTINCT{WB}      { [:DISTINCT, text] }
+            {WB}DATE{WB}          { [:DATE, text] }
+            {WB}ASC{WB}           { [:ASC, text] }
+            {WB}AS{WB}            { [:AS, text] }
+            {WB}FROM{WB}          { [:FROM, text] }
+            {WB}WHERE{WB}         { [:WHERE, text] }
+            {WB}BETWEEN{WB}       { [:BETWEEN, text] }
+            {WB}AND{WB}           { [:AND, text] }
+            {WB}NOT{WB}           { [:NOT, text] }
+            {WB}INNER{WB}         { [:INNER, text] }
+            {WB}INSERT{WB}        { [:INSERT, text] }
+            {WB}INTO{WB}          { [:INTO, text] }
+            {WB}IN{WB}            { [:IN, text] }
+            {WB}ORDER{WB}         { [:ORDER, text] }
+            {WB}OR{WB}            { [:OR, text] }
+            {WB}LIKE{WB}          { [:LIKE, text] }
+            {WB}IS{WB}            { [:IS, text] }
+            {WB}NULL{WB}          { [:NULL, text] }
+            {WB}COUNT{WB}         { [:COUNT, text] }
+            {WB}AVG{WB}           { [:AVG, text] }
+            {WB}MAX{WB}           { [:MAX, text] }
+            {WB}MIN{WB}           { [:MIN, text] }
+            {WB}SUM{WB}           { [:SUM, text] }
+            {WB}GROUP{WB}         { [:GROUP, text] }
+            {WB}BY{WB}            { [:BY, text] }
+            {WB}HAVING{WB}        { [:HAVING, text] }
+            {WB}CROSS{WB}         { [:CROSS, text] }
+            {WB}JOIN{WB}          { [:JOIN, text] }
+            {WB}ON{WB}            { [:ON, text] }
+            {WB}LEFT{WB}          { [:LEFT, text] }
+            {WB}OUTER{WB}         { [:OUTER, text] }
+            {WB}RIGHT{WB}         { [:RIGHT, text] }
+            {WB}FULL{WB}          { [:FULL, text] }
+            {WB}USING{WB}         { [:USING, text] }
+            {WB}EXISTS{WB}        { [:EXISTS, text] }
+            {WB}DESC{WB}          { [:DESC, text] }
+            {WB}CURRENT_USER{WB}  { [:CURRENT_USER, text] }
+            {WB}VALUES{WB}        { [:VALUES, text] }
+            {WB}LIMIT{WB}         { [:LIMIT, text] }
+            {WB}OFFSET{WB}        { [:OFFSET, text] }
+            {WB}FALSE{WB}         { [:FALSE, text] }
+            {WB}TRUE{WB}          { [:TRUE, text] }
 
 # tokens
             <>            { [:not_equals_operator, text] }

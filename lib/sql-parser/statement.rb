@@ -56,6 +56,16 @@ module SQLParser
       
     end
 
+    class Explain < Node
+
+      def initialize(expression)
+        @expression = expression
+      end
+
+      attr_accessor :expression
+
+    end
+
     class Limit < Node
 
       def initialize(row_count, offset = 0)
@@ -89,14 +99,16 @@ module SQLParser
     end
 
     class Select < Node
-      def initialize(list, table_expression = nil)
+      def initialize(modifier, list, table_expression = nil)
+        @modifier = modifier
         @list = list
         @table_expression = table_expression
       end
 
+      attr_accessor :modifier
       attr_accessor :list
       attr_accessor :table_expression
-      
+
     end
 
     class SelectList < Node
@@ -110,13 +122,6 @@ module SQLParser
     end
 
     class Distinct < Node
-      
-      def initialize(column)
-        @column = column
-      end
-
-      attr_accessor :column
-      
     end
 
     class All < Node
@@ -527,6 +532,9 @@ module SQLParser
     end
 
     class Integer < Literal
+    end
+
+    class Bool < Literal
     end
     
   end
