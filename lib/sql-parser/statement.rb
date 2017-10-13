@@ -76,6 +76,16 @@ module SQLParser
 
     end
 
+    class ShowCreateTable < Node
+
+      def initialize(table_reference)
+        @table_reference = table_reference
+      end
+
+      attr_accessor :table_reference
+
+    end
+
     class Limit < Node
 
       def initialize(row_count, offset = 0)

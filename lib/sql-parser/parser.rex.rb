@@ -225,6 +225,12 @@ class SQLParser::Parser < Racc::Parser
       when (text = @ss.scan(/\bINDEXES\b/i))
          action { [:INDEX, text] }
 
+      when (text = @ss.scan(/\bCREATE\b/i))
+         action { [:CREATE, text] }
+
+      when (text = @ss.scan(/\bTABLE\b/i))
+         action { [:TABLE, text] }
+
       when (text = @ss.scan(/<>/i))
          action { [:not_equals_operator, text] }
 

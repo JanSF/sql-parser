@@ -89,6 +89,8 @@ rule
             {WB}SHOW{WB}          { [:SHOW, text] }
             {WB}INDEX{WB}         { [:INDEX, text] }
             {WB}INDEXES{WB}       { [:INDEX, text] }
+            {WB}CREATE{WB}        { [:CREATE, text] }
+            {WB}TABLE{WB}         { [:TABLE, text] }
 
 # tokens
             <>            { [:not_equals_operator, text] }

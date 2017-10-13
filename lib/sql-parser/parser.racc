@@ -22,6 +22,7 @@ rule
   show_statement
     : SHOW INDEX FROM table_reference { result = SQLParser::Statement::ShowIndex.new(val[3]) }
     | SHOW INDEX IN table_reference { result = SQLParser::Statement::ShowIndex.new(val[3]) }
+    | SHOW CREATE TABLE table_reference { result = SQLParser::Statement::ShowCreateTable.new(val[3]) }
 
   direct_select_statement_multiple_rows
     : query_expression order_by_clause limit_clause { result = SQLParser::Statement::DirectSelect.new(val[0], val[1], val[2]) }

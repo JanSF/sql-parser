@@ -33,6 +33,10 @@ module SQLParser
       "SHOW INDEX FROM #{visit(o.table_reference)}"
     end
 
+    def visit_ShowCreateTable(o)
+      "SHOW CREATE TABLE #{visit(o.table_reference)}"
+    end
+
     def visit_Limit(o)
       offset = o.offset > 0 ? " OFFSET #{o.offset}" : ""
       "LIMIT #{o.row_count}#{offset}"

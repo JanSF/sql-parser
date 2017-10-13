@@ -35,6 +35,10 @@ class TestParser < Test::Unit::TestCase
     assert_sql 'SHOW INDEX FROM `users`', 'SHOW INDEXES FROM `users`'
   end
 
+  def test_show_create_table
+    assert_understands 'SHOW CREATE TABLE `users`'
+  end
+
   def test_case_insensitivity
     assert_sql 'SELECT * FROM `users` WHERE `id` = 1', 'select * from users where id = 1'
   end
